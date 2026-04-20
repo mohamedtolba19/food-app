@@ -15,7 +15,7 @@ export default function Login() {
     let response = await axios.post("https://upskilling-egypt.com:3006/api/v1/Users/Login" , data) ;
     localStorage.setItem("token" , response.data.token)
     toast.success("Login successfully");
-    navigate("./dashboard")
+    navigate("/dashboard")
    } catch (error) {
      toast.error("Login Failed");
      console.log(error)
