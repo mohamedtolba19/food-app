@@ -2,6 +2,9 @@ import React from 'react'
 
 export default function Sidebar() {
   return (
-    <div>Sidebar</div>
+    <div>
+      <h2>sidebar</h2>
+     
+    </div>
   )
 }

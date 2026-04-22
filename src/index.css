@@ -15,3 +15,8 @@
   border-color: rgb(47,140,96) ;       
   box-shadow: none;         
 }
+.error-element {
+
+  min-height: 20px !important;
+  
+}

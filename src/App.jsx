@@ -1,8 +1,7 @@
-import { Children, useState } from 'react'
+import { Children, useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
-
 import './App.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import AuthLayout from './Models/SharedComponents/Components/AutheLayout/AuthLayout'
@@ -20,8 +19,33 @@ import FavouritesList from './Models/Favourites/Components/FavouritesList/Favour
 import CategoriesList from './Models/Categories/Components/CategoriesList/CategoriesList'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { jwtDecode } from 'jwt-decode'
+import ProtectedRoute from './Models/SharedComponents/Components/ProtectedRoute/ProtectedRoute'
 
 function App() {
+
+  const [loginData, setloginData] = useState(null);
+
+function saveLoginData(){
+  let token = localStorage.getItem("token");
+
+  if(token){
+    try {
+      let decodedData = jwtDecode(token);
+      setloginData(decodedData);
+    } catch (error) {
+      console.log("Invalid token", error);
+      localStorage.removeItem("token"); // مهم جدا
+      setloginData(null);
+    }
+  }
+}
+useEffect(() => {
+  if(localStorage.getItem("token")){
+    saveLoginData();
+  }
+
+}, [])
 
   const router = createBrowserRouter(
     
@@ -31,8 +55,8 @@ function App() {
         element:<AuthLayout/>,
         errorElement:<Notfound/>,
         children: [
-          {index:true , element : <Login/>},
-          {path:"login" , element : <Login/>},
+          {index:true , element : <Login saveLoginData = {saveLoginData} />},
+        {path:"login" , element : <Login saveLoginData = {saveLoginData} />},
           {path:"register" , element : <Register/>},
           {path:"verify-account" , element : <VerifyAccount/>},
           {path:"resetpass" , element : <ResetPass/>},
@@ -41,12 +65,11 @@ function App() {
 
       },
      {
-        path:"dashboard" ,
-        element:<MasterLayout/>,
-        errorElement:<Notfound/>,
+        path:"/dashboard" ,
+        element:<ProtectedRoute loginData = {loginData}><MasterLayout loginData = {loginData}/></ProtectedRoute>,
+      
         children: [
           {index:true , element : <Dashboard/>},
-          {path:" " , element : <Dashboard/>},
           {path:"reciepes" , element : <ReciepesList/>},
           {path:"users" , element : <UserList/>},
           {path:"favourites" , element : <FavouritesList/>},

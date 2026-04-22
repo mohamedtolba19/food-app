@@ -7,8 +7,8 @@ export default function AuthLayout() {
         <div className="container-fluid bg-overlay">
             <div className="row justify-content-center align-items-center vh-100">
                 <div className="col-lg-6 col-md-8 bg-white">
-                    <div className="logo-container text-center">
-                        <img className='w-75' src={logo} alt="logo" />
+                    <div className="logo-container text-center pt-3">
+                        <img className='w-50' src={logo} alt="logo" />
                     </div>
                     
                     <Outlet/>
